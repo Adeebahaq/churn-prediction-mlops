@@ -1,0 +1,56 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Data and model artifacts (tracked by DVC, not Git)
+data/raw/*.csv
+data/processed/*.csv
+data/processed/*.pkl
+data/processed/*.npy
+models/*.pkl
+models/*.joblib
+models/*.onnx
+metrics/*.json
+
+# MLflow local artifacts
+mlruns/
+mlartifacts/
+mlflow.db
+
+# DVC local cache and temporary files
+.dvc/cache/
+.dvc/tmp/
+.dvc/plots/
+*.dvc.lock.bak
+
+# Jupyter notebooks checkpoints
+notebooks/.ipynb_checkpoints/
+
+# Environment and secrets
+.env
+*.env
+*.pem
+*.key
+
+# Temporary files
+*.log
+*.tmp
+.temp_*.py

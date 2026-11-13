@@ -1,0 +1,44 @@
+base:
+  random_state: 42
+  test_size: 0.2
+  target_column: Churn
+
+data:
+  source_url: "https://raw.githubusercontent.com/IBM/telco-customer-churn-on-icp4d/master/data/Telco-Customer-Churn.csv"
+  raw_path: "data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv"
+  processed_dir: "data/processed"
+  expected_rows: 7043
+  expected_columns: 21
+
+validation:
+  max_missing_pct: 5.0
+  max_null_total_charges: 15
+  churn_rate_min: 0.20
+  churn_rate_max: 0.35
+
+preprocessing:
+  drop_customer_id: true
+  impute_total_charges_strategy: "median"
+  categorical_strategy: "onehot"
+  scale_features: true
+
+models:
+  logistic_regression:
+    name: "baseline_logistic_regression"
+    max_iter: 1000
+    class_weight: "balanced"
+    solver: "lbfgs"
+
+  random_forest:
+    name: "main_random_forest"
+    n_estimators: 200
+    max_depth: 16
+    min_samples_split: 5
+    min_samples_leaf: 2
+    class_weight: "balanced"
+    n_jobs: -1
+
+mlflow:
+  experiment_name: "telco_churn_experiment"
+  registered_model_name: "telco_churn_classifier"
+  metric_for_selection: "roc_auc"

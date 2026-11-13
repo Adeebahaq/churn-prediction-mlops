@@ -1,0 +1,207 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python -m src.data.ingest --params params.yaml
+    outs:
+    - path: data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+      hash: md5
+      md5: 3b0bfab28a8101b4e4fdd08025a5c235
+      size: 970457
+  validate:
+    cmd: python -m src.data.validate --params params.yaml --output 
+      metrics/validation_report.json
+    deps:
+    - path: data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+      hash: md5
+      md5: 3b0bfab28a8101b4e4fdd08025a5c235
+      size: 970457
+    - path: params.yaml
+      hash: md5
+      md5: 119778f1f11c5f4ad35a1f571b0a655a
+      size: 1042
+    - path: src/data/validate.py
+      hash: md5
+      md5: f7dfa5d2171eb2a574da809f2523624a
+      size: 3131
+    outs:
+    - path: metrics/validation_report.json
+      hash: md5
+      md5: fb93f96a6f68d4c3f9a1e8d83f1faa39
+      size: 1001
+  preprocess:
+    cmd: python -m src.data.preprocess --params params.yaml --output 
+      data/processed/preprocess_metadata.json
+    deps:
+    - path: data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+      hash: md5
+      md5: 3b0bfab28a8101b4e4fdd08025a5c235
+      size: 970457
+    - path: params.yaml
+      hash: md5
+      md5: 119778f1f11c5f4ad35a1f571b0a655a
+      size: 1042
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: e6b9b182d13fa6758e3c40785cbefdbe
+      size: 3799
+    outs:
+    - path: data/processed/X_test.npy
+      hash: md5
+      md5: 9a87a5dfb486928bafa3736f9895968b
+      size: 507368
+    - path: data/processed/X_train.npy
+      hash: md5
+      md5: 65131c136bb27d3390c707c9fcc22b67
+      size: 2028368
+    - path: data/processed/feature_names.json
+      hash: md5
+      md5: be08a2cf5dc93a4af181f307c88795cf
+      size: 1082
+    - path: data/processed/preprocess_metadata.json
+      hash: md5
+      md5: 918eb30dbfc92962cf258b095e0d75be
+      size: 572
+    - path: data/processed/preprocessor.joblib
+      hash: md5
+      md5: e4f424b4347d28a3a599516d73020160
+      size: 6416
+    - path: data/processed/y_test.npy
+      hash: md5
+      md5: 228c8879c9c5a0612d039b1f2e75f12f
+      size: 11400
+    - path: data/processed/y_train.npy
+      hash: md5
+      md5: 0f8b0c906b4a414e838c5cad8d63c834
+      size: 45200
+  train_baseline:
+    cmd: python -m src.models.baseline --params params.yaml
+    deps:
+    - path: data/processed/X_test.npy
+      hash: md5
+      md5: 9a87a5dfb486928bafa3736f9895968b
+      size: 507368
+    - path: data/processed/X_train.npy
+      hash: md5
+      md5: 65131c136bb27d3390c707c9fcc22b67
+      size: 2028368
+    - path: data/processed/y_test.npy
+      hash: md5
+      md5: 228c8879c9c5a0612d039b1f2e75f12f
+      size: 11400
+    - path: data/processed/y_train.npy
+      hash: md5
+      md5: 0f8b0c906b4a414e838c5cad8d63c834
+      size: 45200
+    - path: params.yaml
+      hash: md5
+      md5: 119778f1f11c5f4ad35a1f571b0a655a
+      size: 1042
+    - path: src/models/baseline.py
+      hash: md5
+      md5: 85d5346ff37d44e605f1d27fc63b8332
+      size: 3770
+    - path: src/utils.py
+      hash: md5
+      md5: 3ed995acd42cc938b093c95fadf6ec6c
+      size: 910
+    outs:
+    - path: models/baseline_metrics.json
+      hash: md5
+      md5: 917c8b0b6926ac51837db5eb9d145404
+      size: 116
+    - path: models/baseline_model.joblib
+      hash: md5
+      md5: 4a62dda9206fec35d0331c021a03f424
+      size: 1231
+  train_main:
+    cmd: python -m src.models.main_model --params params.yaml
+    deps:
+    - path: data/processed/X_test.npy
+      hash: md5
+      md5: 9a87a5dfb486928bafa3736f9895968b
+      size: 507368
+    - path: data/processed/X_train.npy
+      hash: md5
+      md5: 65131c136bb27d3390c707c9fcc22b67
+      size: 2028368
+    - path: data/processed/y_test.npy
+      hash: md5
+      md5: 228c8879c9c5a0612d039b1f2e75f12f
+      size: 11400
+    - path: data/processed/y_train.npy
+      hash: md5
+      md5: 0f8b0c906b4a414e838c5cad8d63c834
+      size: 45200
+    - path: params.yaml
+      hash: md5
+      md5: 119778f1f11c5f4ad35a1f571b0a655a
+      size: 1042
+    - path: src/models/main_model.py
+      hash: md5
+      md5: 3a84a76477e8597fb41c4505ee0ad0ec
+      size: 4070
+    - path: src/utils.py
+      hash: md5
+      md5: 3ed995acd42cc938b093c95fadf6ec6c
+      size: 910
+    outs:
+    - path: models/main_metrics.json
+      hash: md5
+      md5: 644e1ae8b417c4f0dbc1c81ce4d45242
+      size: 114
+    - path: models/main_model.joblib
+      hash: md5
+      md5: aacb5e374c0de201d4d3eb459f7981c1
+      size: 21143385
+  evaluate:
+    cmd: python -m src.models.evaluate --params params.yaml
+    deps:
+    - path: data/processed/X_test.npy
+      hash: md5
+      md5: 9a87a5dfb486928bafa3736f9895968b
+      size: 507368
+    - path: data/processed/X_train.npy
+      hash: md5
+      md5: 65131c136bb27d3390c707c9fcc22b67
+      size: 2028368
+    - path: data/processed/y_test.npy
+      hash: md5
+      md5: 228c8879c9c5a0612d039b1f2e75f12f
+      size: 11400
+    - path: data/processed/y_train.npy
+      hash: md5
+      md5: 0f8b0c906b4a414e838c5cad8d63c834
+      size: 45200
+    - path: models/baseline_metrics.json
+      hash: md5
+      md5: 917c8b0b6926ac51837db5eb9d145404
+      size: 116
+    - path: models/baseline_model.joblib
+      hash: md5
+      md5: 4a62dda9206fec35d0331c021a03f424
+      size: 1231
+    - path: models/main_metrics.json
+      hash: md5
+      md5: 644e1ae8b417c4f0dbc1c81ce4d45242
+      size: 114
+    - path: models/main_model.joblib
+      hash: md5
+      md5: aacb5e374c0de201d4d3eb459f7981c1
+      size: 21143385
+    - path: params.yaml
+      hash: md5
+      md5: 119778f1f11c5f4ad35a1f571b0a655a
+      size: 1042
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: 9a13e4ae1c6f4b96e380bacbd01e4045
+      size: 4263
+    - path: src/utils.py
+      hash: md5
+      md5: 3ed995acd42cc938b093c95fadf6ec6c
+      size: 910
+    outs:
+    - path: metrics/model_comparison.json
+      hash: md5
+      md5: 0cbcf64d3a609d27d9bd3aa50665cac6
+      size: 429

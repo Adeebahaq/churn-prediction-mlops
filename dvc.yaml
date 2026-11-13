@@ -1,0 +1,83 @@
+stages:
+  ingest:
+    cmd: python -m src.data.ingest --params params.yaml
+    outs:
+      - data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv:
+          cache: true
+          persist: false
+
+  validate:
+    cmd: python -m src.data.validate --params params.yaml --output metrics/validation_report.json
+    deps:
+      - src/data/validate.py
+      - data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+      - params.yaml
+    outs:
+      - metrics/validation_report.json:
+          cache: true
+
+  preprocess:
+    cmd: python -m src.data.preprocess --params params.yaml --output data/processed/preprocess_metadata.json
+    deps:
+      - src/data/preprocess.py
+      - data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
+      - params.yaml
+    outs:
+      - data/processed/X_train.npy
+      - data/processed/X_test.npy
+      - data/processed/y_train.npy
+      - data/processed/y_test.npy
+      - data/processed/preprocessor.joblib
+      - data/processed/feature_names.json
+      - data/processed/preprocess_metadata.json:
+          cache: true
+
+  train_baseline:
+    cmd: python -m src.models.baseline --params params.yaml
+    deps:
+      - src/models/baseline.py
+      - src/utils.py
+      - data/processed/X_train.npy
+      - data/processed/X_test.npy
+      - data/processed/y_train.npy
+      - data/processed/y_test.npy
+      - params.yaml
+    outs:
+      - models/baseline_model.joblib:
+          cache: true
+      - models/baseline_metrics.json:
+          cache: true
+
+  train_main:
+    cmd: python -m src.models.main_model --params params.yaml
+    deps:
+      - src/models/main_model.py
+      - src/utils.py
+      - data/processed/X_train.npy
+      - data/processed/X_test.npy
+      - data/processed/y_train.npy
+      - data/processed/y_test.npy
+      - params.yaml
+    outs:
+      - models/main_model.joblib:
+          cache: true
+      - models/main_metrics.json:
+          cache: true
+
+  evaluate:
+    cmd: python -m src.models.evaluate --params params.yaml
+    deps:
+      - src/models/evaluate.py
+      - src/utils.py
+      - models/baseline_model.joblib
+      - models/baseline_metrics.json
+      - models/main_model.joblib
+      - models/main_metrics.json
+      - data/processed/X_train.npy
+      - data/processed/X_test.npy
+      - data/processed/y_train.npy
+      - data/processed/y_test.npy
+      - params.yaml
+    outs:
+      - metrics/model_comparison.json:
+          cache: true
