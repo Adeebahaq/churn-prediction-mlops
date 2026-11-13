@@ -1,5 +1,7 @@
 """Shared utilities for paths, logging, and config loading."""
+import io
 import os
+import sys
 import yaml
 from pathlib import Path
 
@@ -14,7 +16,7 @@ def ensure_dir(path: str) -> None:
 
 
 def get_project_root() -> Path:
-    return Path(__file__).resolve().parents[2]
+    return Path(__file__).resolve().parents[1]
 
 
 def load_env() -> None:
@@ -28,3 +30,14 @@ def load_env() -> None:
                     continue
                 key, value = line.split("=", 1)
                 os.environ.setdefault(key.strip(), value.strip())
+
+
+def fix_stdout_encoding() -> None:
+    """Force UTF-8 stdout/stderr to avoid Windows cp1252 emoji errors."""
+    try:
+        if sys.stdout.encoding != "utf-8":
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
+        if sys.stderr.encoding != "utf-8":
+            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8")
+    except Exception:  # noqa: BLE001
+        pass

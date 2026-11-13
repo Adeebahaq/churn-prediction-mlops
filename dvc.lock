@@ -98,12 +98,12 @@ stages:
       size: 1042
     - path: src/models/baseline.py
       hash: md5
-      md5: 85d5346ff37d44e605f1d27fc63b8332
-      size: 3770
+      md5: 2ae1d78f119aeef395663c463b237583
+      size: 3817
     - path: src/utils.py
       hash: md5
-      md5: 3ed995acd42cc938b093c95fadf6ec6c
-      size: 910
+      md5: ea00057fd4979c569c436b5c7c0b653a
+      size: 1346
     outs:
     - path: models/baseline_metrics.json
       hash: md5
@@ -138,12 +138,12 @@ stages:
       size: 1042
     - path: src/models/main_model.py
       hash: md5
-      md5: 3a84a76477e8597fb41c4505ee0ad0ec
-      size: 4070
+      md5: 33f010490b91606384f445bb2dfd5df1
+      size: 4117
     - path: src/utils.py
       hash: md5
-      md5: 3ed995acd42cc938b093c95fadf6ec6c
-      size: 910
+      md5: ea00057fd4979c569c436b5c7c0b653a
+      size: 1346
     outs:
     - path: models/main_metrics.json
       hash: md5
@@ -194,12 +194,12 @@ stages:
       size: 1042
     - path: src/models/evaluate.py
       hash: md5
-      md5: 9a13e4ae1c6f4b96e380bacbd01e4045
-      size: 4263
+      md5: a5d4d69a4cd6f5a1713199610ec81d13
+      size: 4310
     - path: src/utils.py
       hash: md5
-      md5: 3ed995acd42cc938b093c95fadf6ec6c
-      size: 910
+      md5: ea00057fd4979c569c436b5c7c0b653a
+      size: 1346
     outs:
     - path: metrics/model_comparison.json
       hash: md5

@@ -19,13 +19,14 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 
-from src.utils import load_params, ensure_dir, load_env
+from src.utils import load_params, ensure_dir, load_env, fix_stdout_encoding
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
 
 def setup_mlflow(params: dict):
+    fix_stdout_encoding()
     load_env()
     mlflow_cfg = params.get("mlflow", {})
     tracking_uri = os.getenv("MLFLOW_TRACKING_URI")
