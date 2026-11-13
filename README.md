@@ -91,14 +91,16 @@ MLFLOW_TRACKING_PASSWORD=your_dagshub_token
 
 > Do **not** commit `.env` to Git.
 
-### 4. Configure DVC remote (DagsHub)
+### 4. Configure DVC remote and MLflow (DagsHub)
+
+After filling in `.env`, run the helper script:
 
 ```bash
-dvc remote add origin https://dagshub.com/<owner>/<repo>.dvc
-dvc remote modify origin --local auth basic
-dvc remote modify origin --local user <username>
-dvc remote modify origin --local password <token>
+python scripts/setup_dagshub.py
 ```
+
+This configures the DagsHub DVC remote in `.dvc/config` and local credentials
+in `.dvc/config.local` (which is already ignored by Git).
 
 Pull existing data if any:
 
