@@ -46,6 +46,7 @@ def main():
 
     # Configure DVC remote (DagsHub HTTPS remote)
     run(["dvc", "remote", "add", "-f", "origin", remote_url], check=False)
+    run(["dvc", "remote", "default", "origin"])
     run(["dvc", "remote", "modify", "origin", "--local", "auth", "basic"])
     run(["dvc", "remote", "modify", "origin", "--local", "user", owner])
     run(["dvc", "remote", "modify", "origin", "--local", "password", token])
